@@ -1370,7 +1370,6 @@ public enum ParticleEffect {
 		 * @param longDistance Indicates whether the maximum distance is increased from 256 to 65536
 		 * @param data Data of the effect
 		 * @throws IllegalArgumentException If the speed is lower than 0
-		 * @see #ParticleEffect(ParticleEffect, float, float, float, float, int, boolean, ParticleData)
 		 */
 		public ParticlePacket(ParticleEffect effect, Vector direction, float speed, boolean longDistance, ParticleData data) throws IllegalArgumentException {
 			this(effect, (float) direction.getX(), (float) direction.getY(), (float) direction.getZ(), speed, 0, longDistance, data);
@@ -1382,8 +1381,7 @@ public enum ParticleEffect {
 		 * @param effect Particle effect
 		 * @param color Color of the particle
 		 * @param longDistance Indicates whether the maximum distance is increased from 256 to 65536
-		 * @see #ParticleEffect(ParticleEffect, float, float, float, float, int, boolean, ParticleData)
-		 */
+         */
 		public ParticlePacket(ParticleEffect effect, ParticleColor color, boolean longDistance) {
 			this(effect, color.getValueX(), color.getValueY(), color.getValueZ(), 1, 0, longDistance, null);
 			if (effect == ParticleEffect.REDSTONE && color instanceof OrdinaryColor && ((OrdinaryColor) color).getRed() == 0) {
@@ -1403,11 +1401,13 @@ public enum ParticleEffect {
 				return;
 			}
 			try {
-				version = Integer.parseInt(Character.toString(PackageType.getServerVersion().charAt(3)));
+			    version = Integer.parseInt(PackageType.getServerVersion().split("_")[1]);
 				if (version > 7) {
 					enumParticle = PackageType.MINECRAFT_SERVER.getClass("EnumParticle");
 				}
-				Class<?> packetClass = PackageType.MINECRAFT_SERVER.getClass(version < 7 ? "Packet63WorldParticles" : "PacketPlayOutWorldParticles");
+
+                Class<?> packetClass = PackageType.MINECRAFT_SERVER.getClass(version < 7 ? "Packet63WorldParticles" : "PacketPlayOutWorldParticles");
+
 				packetConstructor = ReflectionUtils.getConstructor(packetClass);
 				getHandle = ReflectionUtils.getMethod("CraftPlayer", PackageType.CRAFTBUKKIT_ENTITY, "getHandle");
 				playerConnection = ReflectionUtils.getField("EntityPlayer", PackageType.MINECRAFT_SERVER, false, "playerConnection");

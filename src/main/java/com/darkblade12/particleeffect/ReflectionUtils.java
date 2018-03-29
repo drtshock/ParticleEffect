@@ -426,7 +426,7 @@ public final class ReflectionUtils {
 		 * @return The server version
 		 */
 		public static String getServerVersion() {
-			return Bukkit.getServer().getClass().getPackage().getName().substring(23);
+			return Bukkit.getServer().getClass().getName().split("\\.")[3];
 		}
 	}
 
